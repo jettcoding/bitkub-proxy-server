@@ -14,8 +14,12 @@ app.get("/", (req, res) => {
 
 app.post("/sendApi", (req, res) => {
   const { method, url, headers, data } = req.body;
-  if (!method || !url)
+  if (!method || !url) {
+    console.log("Method and URL are required");
     return res.status(400).json({ message: "Method and URL are required" });
+  }
+  console.log("Received API request:", { method, url, headers, data });
+  console.log("Sending API request...");
   axios({
     method,
     url,
@@ -23,9 +27,11 @@ app.post("/sendApi", (req, res) => {
     data,
   })
     .then((response) => {
+      console.log("API request successful");
       res.status(response.status).json(response.data);
     })
     .catch((error) => {
+      console.log("API request failed");
       res.status(error.response.status).json(error.response.data);
     });
 });
