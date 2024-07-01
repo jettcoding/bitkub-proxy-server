@@ -5,7 +5,14 @@ const PORT = process.env.PORT || 80;
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-app.use(cors());
+// Configure CORS
+const corsOptions = {
+  origin: '*', // You can specify allowed origins here, e.g., 'http://example.com'
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-BTK-APIKEY', 'X-BTK-TIMESTAMP', 'X-BTK-SIGN'],
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
@@ -32,7 +39,11 @@ app.post("/sendApi", (req, res) => {
     })
     .catch((error) => {
       console.log("API request failed");
-      res.status(error.response.status).json(error.response.data);
+      if (error.response) {
+        res.status(error.response.status).json(error.response.data);
+      } else {
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
     });
 });
 
