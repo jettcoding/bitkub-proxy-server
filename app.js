@@ -6,7 +6,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 443;
 
 // Configure CORS
 const corsOptions = {
