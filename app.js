@@ -1,12 +1,9 @@
 const express = require("express");
-const https = require("https");
-const fs = require("fs");
+const app = express();
 const axios = require("axios");
+const PORT = process.env.PORT || 80;
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
-const app = express();
-const PORT = process.env.PORT || 443;
 
 // Configure CORS
 const corsOptions = {
@@ -41,7 +38,7 @@ app.post("/sendApi", (req, res) => {
       res.status(response.status).json(response.data);
     })
     .catch((error) => {
-      console.log("API request failed", error.response?.status, error.response?.data);
+      console.log("API request failed", error.response.status, error.response.data);
       if (error.response) {
         res.status(error.response.status).json(error.response.data);
       } else {
@@ -50,12 +47,6 @@ app.post("/sendApi", (req, res) => {
     });
 });
 
-// HTTPS options
-const options = {
-  key: fs.readFileSync('./ssl/server.key'),
-  cert: fs.readFileSync('./ssl/server.cert')
-};
-
-https.createServer(options, app).listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running at https://0.0.0.0:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });
